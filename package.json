@@ -1,6 +1,6 @@
 {
   "name": "purchase-service",
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "npm@10.2.4",
   "main": "index.js",
   "dependencies": {
     "@azure/service-bus": "^7.9.5",
@@ -23,15 +23,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "yarn generate-docs && yarn generate-types && yarn run ts-node src/index.ts",
-    "prestart": "yarn generate-docs && yarn generate-types",
-    "generate-docs": "yarn node swagger.js",
-    "generate-types": "yarn run swagger-typescript-api generate -p ./src/generated/swagger-output.json -o ./src/generated -n api-types.ts",
+    "start": "npm run generate-docs && npm run generate-types && ts-node src/index.ts",
+    "prestart": "npm run generate-docs && npm run generate-types",
+    "generate-docs": "node swagger.js",
+    "generate-types": "swagger-typescript-api generate -p ./src/generated/swagger-output.json -o ./src/generated -n api-types.ts",
     "dev": "ts-node src/index.ts"
-  },
-  "dependenciesMeta": {
-    "@types/node@25.0.3": {
-      "unplugged": true
-    }
   }
 }
