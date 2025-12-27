@@ -9,6 +9,10 @@ const getEnvVar = (name: string): string => {
     if (!val) {
         throw new Error(`Environment variable ${name} is missing`);
     }
+    // Strip surrounding quotes if present (Docker --env-file handling)
+    if (val.startsWith('"') && val.endsWith('"')) {
+        return val.slice(1, -1);
+    }
     return val;
 };
 
