@@ -1,8 +1,8 @@
 import { executeQuery } from '../config/db';
 import sql from 'mssql';
 
-export class WarrantyService {
-    static async checkWarrantyEligibility(orderID: number, userID: string): Promise<boolean> {
+export class OrderRepository {
+    static async getOrder(orderID: number, userID: string): Promise<any> {
         const result = await executeQuery(
             'SELECT * FROM [Order] WHERE orderID = @orderID AND userID = @userID',
             [
@@ -10,6 +10,6 @@ export class WarrantyService {
                 { name: 'userID', type: sql.NVarChar, value: String(userID) }
             ]
         );
-        return result.recordset.length > 0;
+        return result.recordset[0];
     }
 }

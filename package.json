@@ -8,7 +8,8 @@
     "express": "^5.2.1",
     "mssql": "^12.2.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^7.0.0-alpha.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
@@ -23,10 +24,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "npm run generate-docs && npm run generate-types && ts-node src/server.ts",
-    "prestart": "npm run generate-docs && npm run generate-types",
-    "generate-docs": "node scripts/swagger.js",
+    "start": "npm run tsoa:gen && ts-node src/index.ts",
+    "prestart": "npm run tsoa:gen",
+    "tsoa:gen": "tsoa spec-and-routes",
     "generate-types": "swagger-typescript-api generate -p ./src/generated/swagger-output.json -o ./src/generated -n api-types.ts",
-    "dev": "ts-node src/server.ts"
+    "dev": "ts-node src/index.ts"
   }
 }
