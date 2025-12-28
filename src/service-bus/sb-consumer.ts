@@ -1,7 +1,6 @@
-import { ServiceBusClient, ServiceBusReceiver, ServiceBusSender } from '@azure/service-bus';
+import { ServiceBusClient, ServiceBusReceiver } from '@azure/service-bus';
 import { config } from '../config';
-import { executeQuery } from '../db';
-import sql from 'mssql';
+import { WarrantyService } from '../services/warranty.service';
 
 let sbClientRead: ServiceBusClient;
 let sbClientWrite: ServiceBusClient;
@@ -21,15 +20,9 @@ const processMessage = async (messageReceived: any) => {
     }
 
     try {
-        const result = await executeQuery(
-            'SELECT * FROM [Order] WHERE orderID = @orderID AND userID = @userID',
-            [
-                { name: 'orderID', type: sql.Int, value: orderID },
-                { name: 'userID', type: sql.NVarChar, value: String(userID) }
-            ]
-        );
+        const isEligible = await WarrantyService.checkWarrantyEligibility(orderID, userID);
 
-        if (result.recordset.length > 0) {
+        if (isEligible) {
             console.log(`Order ${orderID} found for user ${userID}. Sending confirmation.`);
 
             if (messageReceived.replyTo) {

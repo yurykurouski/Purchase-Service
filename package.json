@@ -23,10 +23,10 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "npm run generate-docs && npm run generate-types && ts-node src/index.ts",
+    "start": "npm run generate-docs && npm run generate-types && ts-node src/server.ts",
     "prestart": "npm run generate-docs && npm run generate-types",
-    "generate-docs": "node swagger.js",
+    "generate-docs": "node scripts/swagger.js",
     "generate-types": "swagger-typescript-api generate -p ./src/generated/swagger-output.json -o ./src/generated -n api-types.ts",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/server.ts"
   }
 }
