@@ -14,7 +14,7 @@ COPY . .
 
 # Generate Swagger docs and types
 # Note: These scripts are defined in package.json
-RUN npm run generate-docs
+RUN npm run tsoa:gen
 RUN npm run generate-types
 
 # Build the TypeScript project
@@ -55,4 +55,4 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # Start the application
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/index.js"]
