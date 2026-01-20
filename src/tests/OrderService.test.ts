@@ -30,6 +30,7 @@ describe("OrderService", () => {
                 orderID: orderId,
                 userID: userId,
                 // Add other necessary properties if needed by type, but currently "any" or loose typing might be in use
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any);
 
             // Act

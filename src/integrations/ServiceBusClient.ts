@@ -1,8 +1,4 @@
-import {
-    ServiceBusClient,
-    ServiceBusReceiver,
-    ServiceBusSender,
-} from "@azure/service-bus";
+import { ServiceBusClient, ServiceBusReceiver } from "@azure/service-bus";
 import { config } from "../config";
 import { orderService } from "../services/OrderService";
 
@@ -41,7 +37,11 @@ export class ServiceBusIntegration {
         });
     }
 
-    private async processMessage(messageReceived: any) {
+    private async processMessage(messageReceived: {
+        subject?: string;
+        body: { orderID: number; userID: string };
+        replyTo?: string;
+    }) {
         if (messageReceived.subject !== "WarrantyRequest") {
             return;
         }
