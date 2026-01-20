@@ -31,7 +31,7 @@
     "typescript-eslint": "^8.53.1"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run tsoa:gen && tsc",
     "start": "npm run tsoa:gen && ts-node src/index.ts",
     "prestart": "npm run tsoa:gen",
     "tsoa:gen": "tsoa spec-and-routes",
