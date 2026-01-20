@@ -30,3 +30,20 @@ steps:
   - script: |
       npm run lint
     displayName: "Lint Check"
+
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: "$(System.DefaultWorkingDirectory)"
+      Contents: |
+        package.json
+        package-lock.json
+        Dockerfile
+        .env.example
+      TargetFolder: "$(System.DefaultWorkingDirectory)/dist"
+    displayName: "Copy config files to dist"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "$(System.DefaultWorkingDirectory)/dist"
+      ArtifactName: "drop"
+      publishLocation: "Container"
