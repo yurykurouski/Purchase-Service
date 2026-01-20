@@ -4,6 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "@azure/service-bus": "^7.9.5",
+    "@azure/storage-queue": "^12.29.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mssql": "^12.2.0",

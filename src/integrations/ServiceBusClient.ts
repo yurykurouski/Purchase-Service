@@ -1,6 +1,10 @@
-import { ServiceBusClient, ServiceBusReceiver, ServiceBusSender } from '@azure/service-bus';
-import { config } from '../config';
-import { orderService } from '../services/OrderService';
+import {
+    ServiceBusClient,
+    ServiceBusReceiver,
+    ServiceBusSender,
+} from "@azure/service-bus";
+import { config } from "../config";
+import { orderService } from "../services/OrderService";
 
 export class ServiceBusIntegration {
     private sbClientRead: ServiceBusClient;
@@ -8,8 +12,12 @@ export class ServiceBusIntegration {
     private receiver: ServiceBusReceiver;
 
     constructor() {
-        this.sbClientRead = new ServiceBusClient(config.serviceBusConnectionStringRead);
-        this.sbClientWrite = new ServiceBusClient(config.serviceBusConnectionStringWrite);
+        this.sbClientRead = new ServiceBusClient(
+            config.serviceBusConnectionStringRead,
+        );
+        this.sbClientWrite = new ServiceBusClient(
+            config.serviceBusConnectionStringWrite,
+        );
         this.receiver = this.sbClientRead.createReceiver(config.queueName);
     }
 
@@ -21,17 +29,20 @@ export class ServiceBusIntegration {
                 try {
                     await this.processMessage(message);
                 } catch (err) {
-                    console.error('Error processing message', err);
+                    console.error("Error processing message", err);
                 }
             },
             processError: async (args) => {
-                console.error(`Error from source ${args.errorSource} occurred: `, args.error);
+                console.error(
+                    `Error from source ${args.errorSource} occurred: `,
+                    args.error,
+                );
             },
         });
     }
 
     private async processMessage(messageReceived: any) {
-        if (messageReceived.subject !== 'WarrantyRequest') {
+        if (messageReceived.subject !== "WarrantyRequest") {
             return;
         }
 
@@ -39,33 +50,40 @@ export class ServiceBusIntegration {
         console.log(`Received message with orderID: ${orderID}, userID: ${userID}`);
 
         if (!orderID || !userID) {
-            console.error('Missing orderID or userID in message body');
+            console.error("Missing orderID or userID in message body");
             return;
         }
 
         try {
-            const isEligible = await orderService.checkWarrantyEligibility(orderID, userID);
+            const isEligible = await orderService.checkWarrantyEligibility(
+                orderID,
+                userID,
+            );
 
             if (isEligible) {
-                console.log(`Order ${orderID} found for user ${userID}. Sending confirmation.`);
+                console.log(
+                    `Order ${orderID} found for user ${userID}. Sending confirmation.`,
+                );
 
                 if (messageReceived.replyTo) {
-                    const sender = this.sbClientWrite.createSender(messageReceived.replyTo);
+                    const sender = this.sbClientWrite.createSender(
+                        messageReceived.replyTo,
+                    );
                     const message = {
-                        body: { status: 'Registered' },
-                        subject: 'WarrantyConfirmation'
+                        body: { status: "Registered" },
+                        subject: "WarrantyConfirmation",
                     };
                     await sender.sendMessages(message);
                     await sender.close();
                     console.log(`Sent confirmation to ${messageReceived.replyTo}`);
                 } else {
-                    console.warn('No replyTo address specified in the message.');
+                    console.warn("No replyTo address specified in the message.");
                 }
             } else {
                 console.warn(`Order ${orderID} not found for user ${userID}`);
             }
         } catch (error) {
-            console.error('Error validation order or sending reply:', error);
+            console.error("Error validation order or sending reply:", error);
         }
     }
 
