@@ -24,5 +24,9 @@ steps:
     displayName: "TypeScript Build"
 
   - script: |
+      npm test
+    displayName: "Run Tests"
+
+  - script: |
       npm run lint
     displayName: "Lint Check"
