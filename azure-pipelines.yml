@@ -48,6 +48,11 @@ stages:
               TargetFolder: "$(System.DefaultWorkingDirectory)/dist"
             displayName: "Copy config files to dist"
 
+          - script: |
+              cd $(System.DefaultWorkingDirectory)/dist
+              npm install --only=production
+            displayName: "Install Production Dependencies"
+
           - task: ArchiveFiles@2
             inputs:
               rootFolderOrFile: "$(System.DefaultWorkingDirectory)/dist"
