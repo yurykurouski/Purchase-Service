@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Route, SuccessResponse } from "tsoa";
+import { Body, Controller, Post, Route, SuccessResponse, Put, Get, Query } from "tsoa";
 import { orderService } from "../services/OrderService";
 
 interface CheckEligibilityRequest {
@@ -34,4 +34,24 @@ export class OrderController extends Controller {
             userID,
         };
     }
+
+    /**
+     * Place a new order
+     */
+    @Put()
+    @SuccessResponse("201", "Created")
+    public async placeOrder(
+        @Body() requestBody: { userID: string; sku: string },
+    ): Promise<{ success: boolean; message: string }> {
+        return await orderService.placeOrder(requestBody.userID, requestBody.sku);
+    }
+
+    /**
+     * Get order history for a user
+     */
+    @Get()
+    public async getHistory(@Query() userID: string): Promise<unknown[]> {
+        return await orderService.getOrderHistory(userID);
+    }
 }
+

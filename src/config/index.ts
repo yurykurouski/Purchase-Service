@@ -42,4 +42,5 @@ export const config = {
         ),
         queueName: process.env.STORAGE_QUEUE_NAME?.replace(/^"|"$/g, ""),
     },
+    deviceServiceUrl: process.env.DEVICE_SERVICE_URL || "http://localhost:3002",
 };
