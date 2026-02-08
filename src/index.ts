@@ -6,6 +6,9 @@ import { serviceBusIntegration } from "./integrations/ServiceBusClient";
 import { ValidateError } from "tsoa";
 import { register } from "./metrics";
 
+import swaggerJson from "./generated/swagger.json";
+
+
 const app = express();
 
 app.use(express.json());
@@ -22,7 +25,6 @@ try {
 
 // Swagger UI
 try {
-    const swaggerJson = require("./generated/swagger.json");
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
 } catch (err) {
     console.warn(
@@ -57,6 +59,7 @@ app.use(function errorHandler(
         });
     }
     if (err instanceof Error) {
+        console.error("Internal Server Error:", err);
         return res.status(500).json({
             message: "Internal Server Error",
         });
